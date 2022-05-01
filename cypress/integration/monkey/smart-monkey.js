@@ -300,11 +300,11 @@ function avPag(){
     if(curPageMaxY - curY >= viewportHeight){ 
         if(curPageMaxY - (curY + viewportHeight) >= viewportHeight){
             curY = curY + viewportHeight
-            cy.scrollTo(curX, curY)
+            cy.scrollTo('bottom', {ensureScrollable: false})
         } 
         else{
             curY = curPageMaxY - viewportHeight
-            cy.scrollTo(curX, curY)
+            cy.scrollTo('bottom', {ensureScrollable: false});
             info += "Page limit reached! "
         }
         info += `Successfully scrolled down from y=${prev} to y=${curY}`
@@ -324,12 +324,12 @@ function rePag(){
     else{
         if(viewportHeight > curY){
             curY =  0
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, {ensureScrollable: false})
             info += "Page limit reached! "
         }
         else{
             curY = curY - viewportHeight
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, {ensureScrollable: false})
         }
         info += `Successfully scrolled up from y=${prev} to y=${curY}`
     }
@@ -342,11 +342,11 @@ function horizontalScrollFw(){
     if(curPageMaxX - curX >= viewportWidth){ 
         if(curPageMaxX - (curX + viewportWidth) >= viewportWidth){
             curX = curX + viewportWidth
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, {ensureScrollable: false})
         } 
         else{
             curX = curPageMaxX - viewportWidth
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, {ensureScrollable: false})
             info += "Page limit reached! "
         }
         info += `Successfully scrolled to the right from x=${prev} to x=${curX}`
@@ -366,12 +366,12 @@ function horizontalScrollBk(){
     else{
         if(viewportWidth > curX){
             curX =  0
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, {ensureScrollable: false})
             info += "Page limit reached! "
         }
         else{
             curX = curX - viewportWidth
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, {ensureScrollable: false})
         }
         info += `Successfully scrolled to the left from x=${prev} to x=${curX}`
     }
@@ -521,7 +521,10 @@ function fillInput(){ //Or fill form
             //console.log(inp.getAttribute("type"));
             if(!Cypress.dom.isHidden(inp)) {
                 focused = true;
-                if(inp.getAttribute("type") == "email"){
+                if(inp.getAttribute("id") == 'ember7'){
+                    cy.wrap(inp).type("test@test.tt");
+                }
+                else if(inp.getAttribute("type") == "email"){
                     let type = faker.internet.email;
                     cy.wrap(inp).type(faker.internet.email);
                     info = `Input ${inp.id} was filled with ${type}`
@@ -678,9 +681,23 @@ describe( `${appName} under smarter monkeys`, function() {
             })
             cy.wait(1000)
             //Add an event for each type of event in order to enter the else statement of randomEvent method
+            
+            
             for(let i = 0; i < events + 7; i++){
-                evtIndex++
-                randomEvent()
+                cy.window().then((win)=>{
+                    if(win.location.href.includes('signin')){
+
+                        let ember7 = win.document.getElementById("ember7");
+                        cy.wrap(ember7).type("test@test.tt");
+                        let ember9 = win.document.getElementById("ember9");
+                        cy.wrap(ember9).type("1234567890a.");
+                        let loginButton = win.document.getElementById("ember11");
+                        cy.wrap(loginButton).click({force: true});
+                        cy.wait(2000)
+                    }
+                    evtIndex++
+                    randomEvent()
+                })
             }
         }
         else cy.task('logPctNo100')

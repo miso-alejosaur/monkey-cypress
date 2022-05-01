@@ -288,11 +288,11 @@ function avPag(){
     if(curPageMaxY - curY >= viewportHeight){ 
         if(curPageMaxY - (curY + viewportHeight) >= viewportHeight){
             curY = curY + viewportHeight
-            cy.scrollTo(curX, curY)
+            cy.scrollTo('bottom', {ensureScrollable: false})
         } 
         else{
             curY = curPageMaxY - viewportHeight
-            cy.scrollTo(curX, curY)
+            cy.scrollTo('bottom', {ensureScrollable: false});
             info += "Page limit reached! "
         }
         info += `Successfully scrolled down from y=${prev} to y=${curY}`
