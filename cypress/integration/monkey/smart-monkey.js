@@ -688,7 +688,7 @@ describe( `${appName} under smarter monkeys`, function() {
                         cy.wrap(ember7).type("test@test.tt");
                         let ember9 = win.document.getElementById("ember9");
                         cy.wrap(ember9).type("1234567890a.");
-                        let loginButton = win.document.getElementById("ember11");
+                        let loginButton = win.document.getElementById("ember12");
                         cy.wrap(loginButton).click({force: true});
                         cy.wait(2000)
                     }

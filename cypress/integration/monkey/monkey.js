@@ -547,7 +547,11 @@ describe( `${appName} under monkeys`, function() {
             })
             cy.wait(1000)
             //Add an event for each type of event in order to enter the else statement of randomEvent method
-            for(let i = 0; i < events + 5; i++){
+            /*for(let i = 0; i < events + 5; i++){
+                evtIndex++
+                randomEvent()
+            }*/
+            for(let i = 0; i < events + 7; i++){
                 cy.window().then((win)=>{
                     if(win.location.href.includes('signin')){
 
