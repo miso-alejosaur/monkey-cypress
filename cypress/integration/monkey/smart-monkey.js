@@ -150,7 +150,7 @@ function randDClick(){
         if(!!element){
             //Use cypress selector if any fits
             if(!!element.id){ //boolean that indicates if the element has a non-empty id
-                cy.get(`#${element.id}`).dblclick()
+                cy.get(`#${element.id}`).dblclick({force: true})
                 info = `${element.tagName} with id: ${element.id}`
             }
             /*
@@ -387,6 +387,7 @@ function reload(){
 function enter(){
     let info = ""
     if(focused){
+        tab();
         cy.focused().type("{enter}")
         info = "Pressed enter on the element in focus"
     }
@@ -402,6 +403,7 @@ function typeCharKey(){
     let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
     let type = chars.charAt(getRandomInt(0, chars.length-1))
     if(focused){
+        tab();
         cy.focused().type(type)
         info = `Pressed the ${type} key on the element in focus`
     }
@@ -420,6 +422,7 @@ function spkeypress(){
     let spkIndex = getRandomInt(0, specialKeys.length-1)
     let type = modifiers[modIndex] + specialKeys[spkIndex]
     if(focused){
+        tab();
         cy.focused().type(type)
         info = `Pressed the ${type} combination of special keys on the element in focus`
     }
@@ -468,14 +471,8 @@ function navForward(){
 
 function tab(){
     let info = ""
-    if(focused){
-        cy.focused().tab().focus()
-        info = "Tabbed to the next element after the one in focus"
-    }
-    else{
-        cy.get('body').tab().focus()
-        info = "Tabbed into the first focusable element of the document"
-    }
+    cy.get('body').tab().focus();
+    
     focused = true
     cy.task("logCommand", { funtype: "Selector focus (tab)", info: info})
 }

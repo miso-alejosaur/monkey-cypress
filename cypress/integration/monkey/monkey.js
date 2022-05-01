@@ -548,8 +548,20 @@ describe( `${appName} under monkeys`, function() {
             cy.wait(1000)
             //Add an event for each type of event in order to enter the else statement of randomEvent method
             for(let i = 0; i < events + 5; i++){
-                evtIndex++
-                randomEvent()
+                cy.window().then((win)=>{
+                    if(win.location.href.includes('signin')){
+
+                        let ember7 = win.document.getElementById("ember7");
+                        cy.wrap(ember7).type("test@test.tt");
+                        let ember9 = win.document.getElementById("ember9");
+                        cy.wrap(ember9).type("1234567890a.");
+                        let loginButton = win.document.getElementById("ember11");
+                        cy.wrap(loginButton).click({force: true});
+                        cy.wait(2000)
+                    }
+                    evtIndex++
+                    randomEvent()
+                });
             }
         }
         else cy.task('logPctNo100')
